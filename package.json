@@ -1,0 +1,29 @@
+{
+  "name": "node-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "nodemon src/server.ts",
+    "debug": "nodemon src/server.ts && tsc",
+    "build": "tsc -p .",
+    "generate": "tsoa spec --basePath v1 && tsoa routes --basePath v1 && tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/cors": "^2.8.7",
+    "@types/express": "^4.17.7",
+    "@types/mongoose": "^5.7.36",
+    "@types/swagger-ui-express": "^4.1.2",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.1",
+    "nodemon": "^2.0.4",
+    "swagger-ui-express": "^4.1.4",
+    "tsoa": "^3.2.1"
+  }
+}
