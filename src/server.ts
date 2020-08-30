@@ -1,7 +1,6 @@
-import app from './app';
+import app from "./app";
+import { AppConfig } from "./config/app.config";
 
-app.listen(3000, () => {
-    console.log('Express server listening on port ' + 3000);
- })
-
-
+app.listen(new AppConfig().getServerPort(), () =>
+  console.log(`server up at port ${new AppConfig().getServerPort()}`)
+);

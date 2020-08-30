@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import swaggerUi from "swagger-ui-express";
 import * as SwaggerDoc from './routes/swagger.json';
 import {RegisterRoutes} from './routes/routes';
+import 'dotenv/config';
 
 class App {
     public app: express.Express;
@@ -33,14 +34,14 @@ class App {
 
     private connectDB() {
         mongoose
-          .connect("mongodb://localhost:27017/student_crud", {
+          .connect(`${process.env.mongoUrl}`, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
             useFindAndModify: false,
           })
           .then(() => {
-            console.log("db connected");
+            console.log(`db connected`);
           })
           .catch((err) => {
             console.log(err);

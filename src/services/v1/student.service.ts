@@ -3,12 +3,12 @@ import {studentSchema, Student} from '../../models/schemas/student.schema'
 
 export class StudentService {
     public async getStudentList () {
-        const studentList = await Student.find();
+        const studentList = await Student.find().exec();
         return studentList;
     }
 
     public async getStudentDetail(studentId: string) {
-        const studentDetail = await Student.findById(studentId);
+        const studentDetail = await Student.findById(studentId).exec();
         return studentDetail;
     }
 
