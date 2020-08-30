@@ -12,7 +12,7 @@ import 'dotenv/config';
 class App {
     public app: express.Express;
     public server: http.Server;
-    private io: any;
+    public io: any;
     constructor() {
         this.app = express();
         this.server = new http.Server(this.app);

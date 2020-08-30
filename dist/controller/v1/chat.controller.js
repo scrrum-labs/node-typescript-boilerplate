@@ -1,4 +1,23 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,71 +54,53 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StudentService = void 0;
-var student_schema_1 = require("../../models/schemas/student.schema");
-var StudentService = /** @class */ (function () {
-    function StudentService() {
+exports.ChatController = void 0;
+var tsoa_1 = require("tsoa");
+var app_1 = __importDefault(require("../../app"));
+var base_controller_1 = require("../base.controller");
+var ChatController = /** @class */ (function (_super) {
+    __extends(ChatController, _super);
+    function ChatController() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    StudentService.prototype.getStudentList = function () {
+    ChatController.prototype.connect = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var studentList;
+            var socketResult;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, student_schema_1.Student.find().exec()];
+                    case 0: return [4 /*yield*/, app_1.default.io.on('connect', function (socket) {
+                            console.log(socket);
+                            return socket;
+                        })];
                     case 1:
-                        studentList = _a.sent();
-                        return [2 /*return*/, studentList];
+                        socketResult = _a.sent();
+                        this._successResponse('', socketResult, 'Connected', 200, 1);
+                        return [2 /*return*/];
                 }
             });
         });
     };
-    StudentService.prototype.getStudentDetail = function (studentId) {
+    ChatController.prototype.disconnect = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var studentDetail;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, student_schema_1.Student.findById(studentId).exec()];
-                    case 1:
-                        studentDetail = _a.sent();
-                        return [2 /*return*/, studentDetail];
-                }
+                return [2 /*return*/];
             });
         });
     };
-    StudentService.prototype.createStudent = function (studentRequest) {
-        return __awaiter(this, void 0, void 0, function () {
-            var student, studentDetail;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        student = new student_schema_1.Student(studentRequest);
-                        return [4 /*yield*/, student.save()];
-                    case 1:
-                        studentDetail = _a.sent();
-                        return [2 /*return*/, studentDetail];
-                }
-            });
-        });
-    };
-    StudentService.prototype.deleteStudentDetail = function (studentId) {
-        return __awaiter(this, void 0, void 0, function () {
-            var student;
-            return __generator(this, function (_a) {
-                student = student_schema_1.Student.findByIdAndDelete(studentId);
-                return [2 /*return*/, student];
-            });
-        });
-    };
-    StudentService.prototype.updateStudent = function (studentId, studentRequestBody) {
-        return __awaiter(this, void 0, void 0, function () {
-            var studentUpdatedDetail;
-            return __generator(this, function (_a) {
-                studentUpdatedDetail = student_schema_1.Student.findByIdAndUpdate(studentId, studentRequestBody, { new: true });
-                return [2 /*return*/, studentUpdatedDetail];
-            });
-        });
-    };
-    return StudentService;
-}());
-exports.StudentService = StudentService;
+    __decorate([
+        tsoa_1.Get('/connect')
+    ], ChatController.prototype, "connect", null);
+    __decorate([
+        tsoa_1.Get('/disconnect')
+    ], ChatController.prototype, "disconnect", null);
+    ChatController = __decorate([
+        tsoa_1.Tags('Chat'),
+        tsoa_1.Route('/chat')
+    ], ChatController);
+    return ChatController;
+}(base_controller_1.BaseController));
+exports.ChatController = ChatController;

@@ -69,7 +69,9 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/SuccessResponse"
+								}
 							}
 						}
 					}
@@ -117,7 +119,14 @@
 				"operationId": "AddStudent",
 				"responses": {
 					"201": {
-						"description": "Student Registered successfully"
+						"description": "Student Registered successfully",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SuccessResponse"
+								}
+							}
+						}
 					}
 				},
 				"tags": [
@@ -145,7 +154,9 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/SuccessResponse"
+								}
 							}
 						}
 					}
@@ -174,7 +185,9 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/SuccessResponse"
+								}
 							}
 						}
 					}
@@ -203,6 +216,36 @@
 						}
 					}
 				}
+			}
+		},
+		"/chat/connect": {
+			"get": {
+				"operationId": "Connect",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"Chat"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/chat/disconnect": {
+			"get": {
+				"operationId": "Disconnect",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"Chat"
+				],
+				"security": [],
+				"parameters": []
 			}
 		}
 	},

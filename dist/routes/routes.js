@@ -8,6 +8,8 @@ var tsoa_1 = require("tsoa");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 var student_controller_1 = require("./../controller/v1/student.controller");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+var chat_controller_1 = require("./../controller/v1/chat.controller");
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 var models = {
     "SuccessResponse": {
         "dataType": "refObject",
@@ -116,6 +118,36 @@ function RegisterRoutes(app) {
         }
         var controller = new student_controller_1.StudentController();
         var promise = controller.updateStudentDetail.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.get('/v1/chat/connect', function (request, response, next) {
+        var args = {};
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        var validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request, response);
+        }
+        catch (err) {
+            return next(err);
+        }
+        var controller = new chat_controller_1.ChatController();
+        var promise = controller.connect.apply(controller, validatedArgs);
+        promiseHandler(controller, promise, response, next);
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.get('/v1/chat/disconnect', function (request, response, next) {
+        var args = {};
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        var validatedArgs = [];
+        try {
+            validatedArgs = getValidatedArgs(args, request, response);
+        }
+        catch (err) {
+            return next(err);
+        }
+        var controller = new chat_controller_1.ChatController();
+        var promise = controller.disconnect.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

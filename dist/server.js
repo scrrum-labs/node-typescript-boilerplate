@@ -4,6 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var app_1 = __importDefault(require("./app"));
-app_1.default.listen(3000, function () {
-    console.log('Express server listening on port ' + 3000);
+var app_config_1 = require("./config/app.config");
+// App.app.listen(new AppConfig().getServerPort(), () =>
+//   console.log(`server up at port ${new AppConfig().getServerPort()}`)
+// );
+app_1.default.server.listen(new app_config_1.AppConfig().getServerPort(), function () {
+    return console.log("server up at port " + new app_config_1.AppConfig().getServerPort());
 });

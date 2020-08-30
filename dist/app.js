@@ -65,9 +65,14 @@ var mongoose_1 = __importDefault(require("mongoose"));
 var swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 var SwaggerDoc = __importStar(require("./routes/swagger.json"));
 var routes_1 = require("./routes/routes");
+var socket = __importStar(require("socket.io"));
+var http = __importStar(require("http"));
+require("dotenv/config");
 var App = /** @class */ (function () {
     function App() {
         this.app = express_1.default();
+        this.server = new http.Server(this.app);
+        this.io = socket.listen(this.server);
         this.getApiDoc();
         this.startServer();
         this.connectDB();
@@ -88,7 +93,7 @@ var App = /** @class */ (function () {
     };
     App.prototype.connectDB = function () {
         mongoose_1.default
-            .connect("mongodb://localhost:27017/student_crud", {
+            .connect("" + process.env.mongoUrl, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
@@ -111,4 +116,4 @@ var App = /** @class */ (function () {
     };
     return App;
 }());
-exports.default = new App().app;
+exports.default = new App();

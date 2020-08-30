@@ -71,42 +71,66 @@ var StudentController = /** @class */ (function (_super) {
     }
     StudentController.prototype.studentList = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var studentList;
             return __generator(this, function (_a) {
-                return [2 /*return*/, new student_service_1.StudentService().getStudentList()];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, new student_service_1.StudentService().getStudentList()];
+                    case 1:
+                        studentList = _a.sent();
+                        return [2 /*return*/, this._successResponse('', studentList, 'Student List', 200, studentList.length)];
+                }
             });
         });
     };
     StudentController.prototype.studentDetail = function (studentId) {
         return __awaiter(this, void 0, void 0, function () {
-            var studentList;
+            var studentDetail;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, new student_service_1.StudentService().getStudentDetail(studentId)];
                     case 1:
-                        studentList = _a.sent();
-                        return [2 /*return*/, this._successResponse('', studentList, 'Student List', 200)];
+                        studentDetail = _a.sent();
+                        return [2 /*return*/, this._successResponse('', studentDetail, 'Student Detail', 200, 1)];
                 }
             });
         });
     };
     StudentController.prototype.addStudent = function (requestBody) {
         return __awaiter(this, void 0, void 0, function () {
+            var student;
             return __generator(this, function (_a) {
-                return [2 /*return*/, new student_service_1.StudentService().createStudent(requestBody)];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, new student_service_1.StudentService().createStudent(requestBody)];
+                    case 1:
+                        student = _a.sent();
+                        return [2 /*return*/, this._successResponse('', student, 'Student Detail Added Successfully', 200, 1)];
+                }
             });
         });
     };
     StudentController.prototype.deleteStudent = function (studentId) {
         return __awaiter(this, void 0, void 0, function () {
+            var studentDetail;
             return __generator(this, function (_a) {
-                return [2 /*return*/, new student_service_1.StudentService().deleteStudentDetail(studentId)];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, new student_service_1.StudentService().deleteStudentDetail(studentId)];
+                    case 1:
+                        studentDetail = _a.sent();
+                        return [2 /*return*/, this._successResponse('', studentDetail, 'Student Detail Deleted Successfully', 200, 1)];
+                }
             });
         });
     };
     StudentController.prototype.updateStudentDetail = function (studentId, studentRequest) {
         return __awaiter(this, void 0, void 0, function () {
+            var student;
             return __generator(this, function (_a) {
-                return [2 /*return*/, new student_service_1.StudentService().updateStudent(studentId, studentRequest)];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, new student_service_1.StudentService().updateStudent(studentId, studentRequest)];
+                    case 1:
+                        student = _a.sent();
+                        return [2 /*return*/, this._successResponse('', student, 'Student Detail Updated Successfully', 200, 1)];
+                }
             });
         });
     };
