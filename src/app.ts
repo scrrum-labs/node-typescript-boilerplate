@@ -5,12 +5,18 @@ import mongoose from 'mongoose';
 import swaggerUi from "swagger-ui-express";
 import * as SwaggerDoc from './routes/swagger.json';
 import {RegisterRoutes} from './routes/routes';
+import * as socket from 'socket.io';
+import * as http from 'http';
 import 'dotenv/config';
 
 class App {
     public app: express.Express;
+    public server: http.Server;
+    private io: any;
     constructor() {
         this.app = express();
+        this.server = new http.Server(this.app);
+        this.io = socket.listen(this.server);
         this.getApiDoc();
         this.startServer();
         this.connectDB();
@@ -58,4 +64,4 @@ class App {
 }
 
 
-export default new App().app;
+export default new App();
