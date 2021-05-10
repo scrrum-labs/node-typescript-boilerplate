@@ -6,23 +6,14 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"SuccessResponse": {
+			"UserDocumentJSON": {},
+			"SuccessResponseWrapped_UserDocumentJSON_": {
 				"properties": {
 					"message": {
 						"type": "string"
 					},
 					"data": {
-						"anyOf": [
-							{},
-							{
-								"items": {},
-								"type": "array"
-							}
-						]
-					},
-					"total": {
-						"type": "number",
-						"format": "double"
+						"$ref": "#/components/schemas/UserDocumentJSON"
 					}
 				},
 				"required": [
@@ -32,28 +23,53 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"IStudent": {
+			"roles": {
+				"enum": [
+					"superadmin",
+					"staff"
+				],
+				"type": "string"
+			},
+			"UserReequest": {
 				"properties": {
 					"name": {
 						"type": "string"
 					},
-					"course": {
+					"email": {
+						"type": "string"
+					},
+					"type": {
+						"$ref": "#/components/schemas/roles"
+					},
+					"username": {
+						"type": "string"
+					},
+					"secret": {
 						"type": "string"
 					}
 				},
 				"required": [
 					"name",
-					"course"
+					"email",
+					"type",
+					"username",
+					"secret"
 				],
 				"type": "object",
 				"additionalProperties": false
 			}
 		},
-		"securitySchemes": {}
+		"securitySchemes": {
+			"apiKey": {
+				"type": "apiKey",
+				"name": "Authorization",
+				"in": "header"
+			}
+		}
 	},
 	"info": {
-		"title": "node-ts",
-		"version": "1.0.0",
+		"title": "accounting-system-api",
+		"version": "1.1.0-rc.10",
 		"license": {
 			"name": "ISC"
 		},
@@ -61,67 +77,23 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
-		"/student/list": {
-			"get": {
-				"operationId": "StudentList",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Student"
-				],
-				"security": [],
-				"parameters": []
-			}
-		},
-		"/student/{studentId}/detail": {
-			"get": {
-				"operationId": "StudentDetail",
+		"/user/add": {
+			"post": {
+				"operationId": "AddUser",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/SuccessResponse"
+									"$ref": "#/components/schemas/SuccessResponseWrapped_UserDocumentJSON_"
 								}
 							}
 						}
 					}
 				},
 				"tags": [
-					"Student"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "studentId",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		},
-		"/student/create-student": {
-			"post": {
-				"operationId": "AddStudent",
-				"responses": {
-					"201": {
-						"description": "Student Registered successfully"
-					}
-				},
-				"tags": [
-					"Student"
+					"User"
 				],
 				"security": [],
 				"parameters": [],
@@ -130,75 +102,51 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/IStudent"
+								"$ref": "#/components/schemas/UserReequest"
 							}
 						}
 					}
 				}
 			}
 		},
-		"/student/{studentId}/delete": {
-			"delete": {
-				"operationId": "DeleteStudent",
+		"/user/login": {
+			"post": {
+				"operationId": "Login",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/SuccessResponseWrapped_UserDocumentJSON_"
+								}
 							}
 						}
 					}
 				},
 				"tags": [
-					"Student"
+					"User"
 				],
 				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "studentId",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		},
-		"/student/{studentId}/update": {
-			"put": {
-				"operationId": "UpdateStudentDetail",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Student"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "studentId",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				],
+				"parameters": [],
 				"requestBody": {
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/IStudent"
+								"properties": {
+									"secret": {
+										"type": "string"
+									},
+									"username": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"secret",
+									"username"
+								],
+								"type": "object"
 							}
 						}
 					}
@@ -208,7 +156,7 @@
 	},
 	"servers": [
 		{
-			"url": "/v1"
+			"url": "/api/v1"
 		}
 	]
 }

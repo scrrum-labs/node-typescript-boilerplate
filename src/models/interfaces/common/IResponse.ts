@@ -1,5 +1,5 @@
 export interface ErrorResponse {
-    code: string | number | undefined;
+    code: string | number;
     message: string;
   }
   
@@ -16,6 +16,10 @@ export interface ErrorResponse {
   export interface SuccessResponseWrapped<T> {
     message: string;
     data: T;
+  }
+
+  export interface TokenRequestResponse {
+    
   }
   
   export interface SuccessResponse {

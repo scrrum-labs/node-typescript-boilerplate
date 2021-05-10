@@ -3,27 +3,40 @@
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute, HttpStatusCodeLiteral, TsoaResponse } from 'tsoa';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { StudentController } from './../controller/v1/student.controller';
+import { UserController } from './../controllers/v1/user.controller';
+import { expressAuthentication } from './../middlewares/authentication.middleware';
 import * as express from 'express';
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-    "SuccessResponse": {
+    "UserDocumentJSON": {
+        "dataType": "refAlias",
+        "type": { "dataType": "any", "validators": {} },
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "SuccessResponseWrapped_UserDocumentJSON_": {
         "dataType": "refObject",
         "properties": {
             "message": { "dataType": "string", "required": true },
-            "data": { "dataType": "union", "subSchemas": [{ "dataType": "any" }, { "dataType": "array", "array": { "dataType": "any" } }], "required": true },
-            "total": { "dataType": "double" },
+            "data": { "ref": "UserDocumentJSON", "required": true },
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "IStudent": {
+    "roles": {
+        "dataType": "refEnum",
+        "enums": ["superadmin", "staff"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UserReequest": {
         "dataType": "refObject",
         "properties": {
             "name": { "dataType": "string", "required": true },
-            "course": { "dataType": "string", "required": true },
+            "email": { "dataType": "string", "required": true },
+            "type": { "ref": "roles", "required": true },
+            "username": { "dataType": "string", "required": true },
+            "secret": { "dataType": "string", "required": true },
         },
         "additionalProperties": false,
     },
@@ -38,9 +51,11 @@ export function RegisterRoutes(app: express.Express) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-    app.get('/v1/student/list',
+    app.post('/api/v1/user/add',
         function(request: any, response: any, next: any) {
             const args = {
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+                reqBody: { "in": "body", "name": "reqBody", "required": true, "ref": "UserReequest" },
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -52,17 +67,18 @@ export function RegisterRoutes(app: express.Express) {
                 return next(err);
             }
 
-            const controller = new StudentController();
+            const controller = new UserController();
 
 
-            const promise = controller.studentList.apply(controller, validatedArgs as any);
+            const promise = controller.addUser.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/v1/student/:studentId/detail',
+    app.post('/api/v1/user/login',
         function(request: any, response: any, next: any) {
             const args = {
-                studentId: { "in": "path", "name": "studentId", "required": true, "dataType": "string" },
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+                reqBody: { "in": "body", "name": "reqBody", "required": true, "dataType": "nestedObjectLiteral", "nestedProperties": { "secret": { "dataType": "string", "required": true }, "username": { "dataType": "string", "required": true } } },
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -74,77 +90,10 @@ export function RegisterRoutes(app: express.Express) {
                 return next(err);
             }
 
-            const controller = new StudentController();
+            const controller = new UserController();
 
 
-            const promise = controller.studentDetail.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
-        });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/v1/student/create-student',
-        function(request: any, response: any, next: any) {
-            const args = {
-                requestBody: { "in": "body", "name": "requestBody", "required": true, "ref": "IStudent" },
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request, response);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new StudentController();
-
-
-            const promise = controller.addStudent.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
-        });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.delete('/v1/student/:studentId/delete',
-        function(request: any, response: any, next: any) {
-            const args = {
-                studentId: { "in": "path", "name": "studentId", "required": true, "dataType": "string" },
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request, response);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new StudentController();
-
-
-            const promise = controller.deleteStudent.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
-        });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/v1/student/:studentId/update',
-        function(request: any, response: any, next: any) {
-            const args = {
-                studentId: { "in": "path", "name": "studentId", "required": true, "dataType": "string" },
-                studentRequest: { "in": "body", "name": "studentRequest", "required": true, "ref": "IStudent" },
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request, response);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new StudentController();
-
-
-            const promise = controller.updateStudentDetail.apply(controller, validatedArgs as any);
+            const promise = controller.login.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

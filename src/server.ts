@@ -1,6 +1,6 @@
-import app from "./app";
-import { AppConfig } from "./config/app.config";
+import { App } from "./app";
+import * as dotenv from "dotenv";
 
-app.listen(new AppConfig().getServerPort(), () =>
-  console.log(`server up at port ${new AppConfig().getServerPort()}`)
-);
+dotenv.config();
+
+new App().app.listen(process.env.PORT || 3000, () => console.log(`server is running at ${process.env.PORT}`) );
