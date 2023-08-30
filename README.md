@@ -1,2 +1,1 @@
-# accounting_system_api
-# airpac-api
+# Nodejs with typescript and TSOA boilerplate
