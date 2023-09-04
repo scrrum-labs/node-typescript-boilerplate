@@ -1,0 +1,9 @@
+import { BaseDocumentJSON } from "../base.model";
+
+export interface ITemplate {
+    organizationId: string;
+    title: string;
+    isDeleted: boolean;
+}
+
+export interface TemplateDocumentJSON extends BaseDocumentJSON, ITemplate { }

@@ -1,9 +1,10 @@
 {
-  "name": "aripac-api",
+  "name": "scrrum-node-boiler-plate",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "upb": "generate.sh",
     "start": "node dist/server.js",
     "dev": "nodemon src/server.ts",
     "build-ts": "tsc",

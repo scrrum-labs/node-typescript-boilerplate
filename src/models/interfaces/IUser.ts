@@ -1,13 +1,13 @@
 import { BaseDocument } from "../base.model";
-import { roles } from "../enums";
+import { rolesEnum } from "../enums";
 
 export interface IUser {
     name: string;
     email: string;
-    type: roles;
+    type: rolesEnum;
     username: string;
     secret: string;
     isActive: boolean;
 }
 
-export interface UserDocumentJSON extends BaseDocument, IUser {}
+export interface UserDocumentJSON extends BaseDocument, IUser { }

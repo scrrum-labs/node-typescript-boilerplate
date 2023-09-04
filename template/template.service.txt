@@ -1,0 +1,148 @@
+import { ClientSession } from "mongoose";
+import { IRequest } from "../models/interfaces/common/IRequest";
+import { TemplateDocumentJSON } from "../models/interfaces/ITemplate";
+import { IResult } from "../models/interfaces/IResult";
+import { ITemplateRequest } from "../models/requests/template.request";
+import { TemplateDocument, TemplateModel } from "../models/schemas/template.schema";
+import { MyError, MyErrorCodeEnum } from "../utilities/errors";
+import { BaseService } from "./base.service";
+import { OrganizationService } from "./organization.service";
+
+export class TemplateService extends BaseService<TemplateDocument, TemplateDocumentJSON> {
+
+    organizationService: OrganizationService;
+
+    constructor() {
+        super();
+        this.Model = TemplateModel;
+        this.organizationService = new OrganizationService();
+    }
+
+    public async getTemplateList(request: IRequest, pageNo?: number, pageSize?: number, searchText?: any) {
+        try {
+            let result: IResult;
+            const orgId: any = request.organization.organizationId;
+            let template: any[];
+            const queryObj: any = { isDeleted: false, organizationId: orgId };
+
+            if (searchText && searchText !== "undefined") {
+                queryObj["$or"] = [
+                    { "title": { $regex: searchText, $options: "i" } },
+                    // { "field2": { $regex: searchText, $options: "i" } },
+                    // { "field3": { $regex: searchText, $options: "i" } },
+                ];
+            }
+
+            if (pageNo && pageSize) {
+                if (pageNo < 1 || pageSize < 1) {
+                    throw new MyError(MyErrorCodeEnum.ER035);
+                } else {
+                    template = await this._list(queryObj, undefined, pageSize, ((pageNo - 1) * pageSize), undefined, { createdAt:-1 });
+                }
+            } else {
+                template = await this._list(queryObj, undefined, undefined, undefined, undefined, { createdAt: -1 });
+            }
+            const totalCount = await this._count(queryObj);
+            result = {
+                data: {
+                    data: template,
+                    totalCount: totalCount,
+                    filteredCount: template.length
+                },
+                message: "Template List"
+            };
+            return result;
+        } catch (error) {
+            throw new MyError(error);
+        }
+    }
+
+    public async getTemplateDetail(request: IRequest, id: string) {
+        try {
+            let result: IResult;
+            const orgId: any = request.organization.organizationId;
+            const template = await this.Model.find({ _id: id, isDeleted: false, organizationId: orgId });
+            result = {
+                data: template[0],
+                message: "Template Detail"
+            };
+            return result;
+        } catch (error) {
+            throw new MyError(error);
+        }
+
+    }
+
+    public async addTemplate(request: IRequest, req: ITemplateRequest, session: ClientSession) {
+        try {
+            let result: IResult;
+            const orgId: any = request.organization.organizationId;
+            const template = new TemplateModel({
+                organizationId: orgId,
+                title: req.title,
+                isDeleted: false
+            });
+            
+            await this._store(template, session);
+
+            result = {
+                data: template,
+                message: "Template added successfully"
+            };
+            return result;
+        } catch (error) {
+            throw new MyError(error);
+        }
+
+    }
+
+    public async updateTemplate(request: IRequest, id: string, req: ITemplateRequest, session: ClientSession) {
+        try {
+            let result: IResult;
+            const orgId: any = request.organization.organizationId;
+
+            const template = (await this._update(id, {
+                $set: {
+                    organizationId: orgId,
+                    title: req.title,
+                    isDeleted: req.isDeleted
+                }
+            }, session)).toObject();
+
+            result = {
+                data: template,
+                message: "Template updated successfully"
+            };
+
+            return result;
+
+        } catch (error) {
+            throw new MyError(error);
+        }
+
+    }
+
+    public async deleteTemplate(request: IRequest, id: string, session: ClientSession) {
+        try {
+            let result: IResult;
+            const orgId: any = request.organization.organizationId;
+                
+                const template = (await this._update(id, {
+                    $set: {
+                       isDeleted: true
+                    }
+                }, session)).toObject();
+
+                result = {
+                    data: template,
+                    message: "Template deleted successfully"
+                };
+
+                return result;
+
+        } catch (error) {
+            throw new MyError(error);
+        }
+    }
+
+}

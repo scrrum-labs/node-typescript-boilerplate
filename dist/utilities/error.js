@@ -1,21 +1,7 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyErrorCodeEnum = exports.MyError = void 0;
-var MyError = /** @class */ (function (_super) {
-    __extends(MyError, _super);
+class MyError extends Error {
     /**
      *
      * @param param1 MyErrorCodeEnum or an instance of error or just a string
@@ -23,9 +9,8 @@ var MyError = /** @class */ (function (_super) {
      * @param param3 response status code
      * @param param4 any details needed to pass down.
      */
-    function MyError(param1, param2, param3, param4) {
-        var _this = this;
-        var stack;
+    constructor(param1, param2, param3, param4) {
+        let stack;
         if (param1 instanceof MyError) {
             return param1;
         }
@@ -57,32 +42,31 @@ var MyError = /** @class */ (function (_super) {
             param1 = MyErrorCodeEnum.TM00X;
             param3 = 500;
         }
-        var data = getMessageFromCode(param1);
+        const data = getMessageFromCode(param1);
         if (!param2) {
             param2 = data.message;
         }
         if (!param3) {
             param3 = data.responeStatus;
         }
-        _this = _super.call(this, param2) || this;
-        _this.code = param1;
-        _this.stack = stack;
-        if (!_this.stack)
-            Error.captureStackTrace(_this, MyError);
+        super(param2);
+        this.code = param1;
+        this.stack = stack;
+        if (!this.stack)
+            Error.captureStackTrace(this, MyError);
         if (param4) {
-            _this.details = param4;
+            this.details = param4;
         }
-        _this.message = param2;
-        _this.responeStatus = param3 || 500;
+        this.message = param2;
+        this.responeStatus = param3 || 500;
         // Set the prototype explicitly.
-        Object.setPrototypeOf(_this, MyError.prototype);
-        return _this;
+        Object.setPrototypeOf(this, MyError.prototype);
     }
-    MyError.prototype.toString = function () {
-        return this.code + ": " + this.message;
-    };
-    MyError.prototype.toJSON = function () {
-        var ret = {
+    toString() {
+        return `${this.code}: ${this.message}`;
+    }
+    toJSON() {
+        const ret = {
             name: this.name,
             responeStatus: this.responeStatus,
             code: this.code,
@@ -93,9 +77,8 @@ var MyError = /** @class */ (function (_super) {
             delete ret.stack;
         }
         return ret;
-    };
-    return MyError;
-}(Error));
+    }
+}
 exports.MyError = MyError;
 var MyErrorCodeEnum;
 (function (MyErrorCodeEnum) {
@@ -202,3 +185,4 @@ function getMessageFromCode(c) {
             break;
     }
 }
+//# sourceMappingURL=error.js.map

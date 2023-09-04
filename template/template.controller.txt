@@ -1,0 +1,129 @@
+import { RolesEnum } from "./../../models/enums/index";
+import { ActivityLogService } from "./../../services/activity-log.service";
+
+import { SuccessListingResponseWrapped } from "./../../models/interfaces/common/IResponse";
+import mongoose from "mongoose";
+import { MyError } from "./../../utilities/errors";
+import { Body, Delete, Get, Header, Path, Post, Put, Query, Request, Response, Route, Security, Tags } from "tsoa";
+import { IRequest } from "../../models/interfaces/common/IRequest";
+import { ErrorResponse, SuccessResponseWrapped } from "../../models/interfaces/common/IResponse";
+import { TemplateDocumentJSON } from "../../models/interfaces/ITemplate";
+import { ITemplateRequest } from "../../models/requests/template.request";
+import { TemplateService } from "../../services/template.service";
+import { BaseController } from "../base.controller";
+import { TransactionOptions } from "mongodb";
+
+@Tags("Template")
+@Route("template")
+export class TemplateController extends BaseController {
+    templateService: TemplateService;
+    activityLogService: ActivityLogService;
+    transactionOptions: TransactionOptions;
+    this.transactionOptions = {
+        readPreference: 'primary',
+        readConcern: { level: 'local' },
+        writeConcern: { w: 'majority' }
+    };
+
+    constructor() {
+        super();
+        this.templateService = new TemplateService();
+        this.activityLogService = new ActivityLogService();
+    }
+
+    @Response<ErrorResponse>("Invalid Token")
+    @Security({
+        "UserAuthToken": [RolesEnum.staff, RolesEnum.organizationAdmin, RolesEnum.superadmin],
+        "ORGANIZATION-ID": [],
+    })
+    @Get("/")
+    public async get(
+        @Request() req: IRequest,
+        @Query("searchText") searchText?: any,
+        @Header("pageNo") pageNo?: number,
+        @Header("pageSize") pageSize?: number
+    ): Promise<SuccessListingResponseWrapped<TemplateDocumentJSON>> {
+        try {
+            const template = await this.templateService.getTemplateList(req, pageNo, pageSize, searchText);
+            return this._successResponse(req, template.data.data, template.message, 200, template.data.totalCount, template.data.filteredCount);
+        } catch (error) {
+            throw new MyError(error.code, error.message);
+        }
+    }
+
+    @Response<ErrorResponse>("Invalid Token")
+    @Security({
+        "UserAuthToken": [RolesEnum.staff, RolesEnum.organizationAdmin, RolesEnum.superadmin],
+        "ORGANIZATION-ID": [],
+    })
+    @Get("{id}")
+    public async getSingle(@Request() req: IRequest, @Path() id: string): Promise<SuccessResponseWrapped<TemplateDocumentJSON>> {
+        try {
+            const template = await this.templateService.getTemplateDetail(req, id);
+            return this._successResponse(req, template.data, template.message, 200);
+        } catch (error) {
+            throw new MyError(error.code, error.message);
+        }
+    }
+
+    @Response<ErrorResponse>("Invalid Token")
+    @Security({
+        "UserAuthToken": [RolesEnum.staff, RolesEnum.organizationAdmin, RolesEnum.superadmin],
+        "ORGANIZATION-ID": [],
+    })
+    @Post("/")
+    public async add(@Request() req: IRequest, @Body() reqBody: ITemplateRequest): Promise<SuccessResponseWrapped<TemplateDocumentJSON>> {
+        const session = await mongoose.startSession();
+        try {
+            let template;
+            await session.withTransaction(async () => {
+                const template = await this.templateService.addTemplate(req, reqBody, session);
+                await this.activityLogService.recordActivityLogData(req, 'EV-XXXX', template.data);
+            }, this.transactionOptions);
+            return this._successResponse(req, template.data, template.message, 200);
+        } catch (error) {
+            throw new MyError(error.code, error.message);
+        }
+    }
+
+    @Response<ErrorResponse>("Invalid Token")
+    @Security({
+        "UserAuthToken": [RolesEnum.staff, RolesEnum.organizationAdmin, RolesEnum.superadmin],
+        "ORGANIZATION-ID": [],
+    })
+    @Put("{id}")
+    public async update(@Request() req: IRequest, @Path() id: string, @Body() reqBody: ITemplateRequest): Promise<SuccessResponseWrapped<TemplateDocumentJSON>> {
+        const session = await mongoose.startSession();
+        try {
+            session.startTransaction();
+            let template;
+            await session.withTransaction(async () => {
+                const template = await this.templateService.updateTemplate(req, id, reqBody, session);
+                await this.activityLogService.recordActivityLogData(req, 'EV-XXXX', template.data);
+            }, this.transactionOptions);
+            return this._successResponse(req, template.data, template.message, 200);
+        } catch (error) {
+            throw new MyError(error.code, error.message);
+        }
+    }
+
+    @Response<ErrorResponse>("Invalid Token")
+    @Security({
+        "UserAuthToken": [RolesEnum.staff, RolesEnum.organizationAdmin, RolesEnum.superadmin],
+        "ORGANIZATION-ID": [],
+    })
+    @Delete("{id}")
+    public async delete(@Request() req: IRequest, @Path() id: string): Promise<SuccessResponseWrapped<TemplateDocumentJSON>> {
+        const session = await mongoose.startSession();
+        try {
+            let template;
+            await session.withTransaction(async () => {
+                const template = await this.templateService.deleteTemplate(req, id, session);
+                await this.activityLogService.recordActivityLogData(req, 'EV-XXXX', template.data);
+            }, this.transactionOptions);
+            return this._successResponse(req, template.data, template.message, 200);
+        } catch (error) {
+            throw new MyError(error.code, error.message);
+        }
+    }
+}

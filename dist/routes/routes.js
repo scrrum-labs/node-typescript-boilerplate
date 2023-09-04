@@ -4,118 +4,87 @@ exports.RegisterRoutes = void 0;
 /* tslint:disable */
 /* eslint-disable */
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-var tsoa_1 = require("tsoa");
+const tsoa_1 = require("tsoa");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-var student_controller_1 = require("./../controller/v1/student.controller");
+const user_controller_1 = require("./../controllers/v1/user.controller");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-var models = {
-    "SuccessResponse": {
+const models = {
+    "UserDocumentJSON": {
+        "dataType": "refAlias",
+        "type": { "dataType": "any", "validators": {} },
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "SuccessResponseWrapped_UserDocumentJSON_": {
         "dataType": "refObject",
         "properties": {
             "message": { "dataType": "string", "required": true },
-            "data": { "dataType": "union", "subSchemas": [{ "dataType": "any" }, { "dataType": "array", "array": { "dataType": "any" } }], "required": true },
-            "total": { "dataType": "double" },
+            "data": { "ref": "UserDocumentJSON", "required": true },
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "IStudent": {
+    "rolesEnum": {
+        "dataType": "refEnum",
+        "enums": ["admin", "manager", "executive"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "teamsEnum": {
+        "dataType": "refEnum",
+        "enums": ["enquiry", "sales", "design", "manufacturing", "dispatch", "installation"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UserReequest": {
         "dataType": "refObject",
         "properties": {
             "name": { "dataType": "string", "required": true },
-            "course": { "dataType": "string", "required": true },
+            "role": { "ref": "rolesEnum", "required": true },
+            "team": { "ref": "teamsEnum", "required": true },
+            "username": { "dataType": "string", "required": true },
+            "secret": { "dataType": "string", "required": true },
         },
         "additionalProperties": false,
     },
 };
-var validationService = new tsoa_1.ValidationService(models);
+const validationService = new tsoa_1.ValidationService(models);
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 function RegisterRoutes(app) {
     // ###########################################################################################################
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-    app.get('/v1/student/list', function (request, response, next) {
-        var args = {};
+    app.post('/api/v1/user/add', function (request, response, next) {
+        const args = {
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+            reqBody: { "in": "body", "name": "reqBody", "required": true, "ref": "UserReequest" },
+        };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        var validatedArgs = [];
+        let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
         }
         catch (err) {
             return next(err);
         }
-        var controller = new student_controller_1.StudentController();
-        var promise = controller.studentList.apply(controller, validatedArgs);
+        const controller = new user_controller_1.UserController();
+        const promise = controller.addUser.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/v1/student/:studentId/detail', function (request, response, next) {
-        var args = {
-            studentId: { "in": "path", "name": "studentId", "required": true, "dataType": "string" },
+    app.post('/api/v1/user/login', function (request, response, next) {
+        const args = {
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+            reqBody: { "in": "body", "name": "reqBody", "required": true, "dataType": "nestedObjectLiteral", "nestedProperties": { "secret": { "dataType": "string", "required": true }, "username": { "dataType": "string", "required": true } } },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        var validatedArgs = [];
+        let validatedArgs = [];
         try {
             validatedArgs = getValidatedArgs(args, request, response);
         }
         catch (err) {
             return next(err);
         }
-        var controller = new student_controller_1.StudentController();
-        var promise = controller.studentDetail.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/v1/student/create-student', function (request, response, next) {
-        var args = {
-            requestBody: { "in": "body", "name": "requestBody", "required": true, "ref": "IStudent" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        var validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request, response);
-        }
-        catch (err) {
-            return next(err);
-        }
-        var controller = new student_controller_1.StudentController();
-        var promise = controller.addStudent.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.delete('/v1/student/:studentId/delete', function (request, response, next) {
-        var args = {
-            studentId: { "in": "path", "name": "studentId", "required": true, "dataType": "string" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        var validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request, response);
-        }
-        catch (err) {
-            return next(err);
-        }
-        var controller = new student_controller_1.StudentController();
-        var promise = controller.deleteStudent.apply(controller, validatedArgs);
-        promiseHandler(controller, promise, response, next);
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/v1/student/:studentId/update', function (request, response, next) {
-        var args = {
-            studentId: { "in": "path", "name": "studentId", "required": true, "dataType": "string" },
-            studentRequest: { "in": "body", "name": "studentRequest", "required": true, "ref": "IStudent" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        var validatedArgs = [];
-        try {
-            validatedArgs = getValidatedArgs(args, request, response);
-        }
-        catch (err) {
-            return next(err);
-        }
-        var controller = new student_controller_1.StudentController();
-        var promise = controller.updateStudentDetail.apply(controller, validatedArgs);
+        const controller = new user_controller_1.UserController();
+        const promise = controller.login.apply(controller, validatedArgs);
         promiseHandler(controller, promise, response, next);
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -126,9 +95,9 @@ function RegisterRoutes(app) {
     }
     function promiseHandler(controllerObj, promise, response, next) {
         return Promise.resolve(promise)
-            .then(function (data) {
-            var statusCode;
-            var headers;
+            .then((data) => {
+            let statusCode;
+            let headers;
             if (isController(controllerObj)) {
                 headers = controllerObj.getHeaders();
                 statusCode = controllerObj.getStatus();
@@ -136,12 +105,11 @@ function RegisterRoutes(app) {
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
             returnHandler(response, statusCode, data, headers);
         })
-            .catch(function (error) { return next(error); });
+            .catch((error) => next(error));
     }
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    function returnHandler(response, statusCode, data, headers) {
-        if (headers === void 0) { headers = {}; }
-        Object.keys(headers).forEach(function (name) {
+    function returnHandler(response, statusCode, data, headers = {}) {
+        Object.keys(headers).forEach((name) => {
             response.set(name, headers[name]);
         });
         if (data && typeof data.pipe === 'function' && data.readable && typeof data._read === 'function') {
@@ -163,9 +131,9 @@ function RegisterRoutes(app) {
     ;
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     function getValidatedArgs(args, request, response) {
-        var fieldErrors = {};
-        var values = Object.keys(args).map(function (key) {
-            var name = args[key].name;
+        const fieldErrors = {};
+        const values = Object.keys(args).map((key) => {
+            const name = args[key].name;
             switch (args[key].in) {
                 case 'request':
                     return request;
@@ -192,3 +160,4 @@ function RegisterRoutes(app) {
 }
 exports.RegisterRoutes = RegisterRoutes;
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+//# sourceMappingURL=routes.js.map

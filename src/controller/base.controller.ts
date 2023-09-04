@@ -1,9 +1,9 @@
 import { Controller } from 'tsoa';
-import { SuccessResponse, ErrorResponse} from '../models/interfaces/common/IResponse';
+import { SuccessResponse, ErrorResponse } from '../models/interfaces/common/IResponse';
 import { MyError, MyErrorCodeEnum } from '../utilities/error';
 
 export class BaseController extends Controller {
-    /**
+  /**
    * Send error response
    * @param occuredError error string
    * @param status status code
@@ -21,7 +21,7 @@ export class BaseController extends Controller {
     }
     else {
 
-    //   logger.error("Unknown error has appeared during runtime!");
+      //   logger.error("Unknown error has appeared during runtime!");
 
       // generic error preset to 500
       status = 500;

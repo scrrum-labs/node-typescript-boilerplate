@@ -1,35 +1,18 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseController = void 0;
-var tsoa_1 = require("tsoa");
-var error_1 = require("../utilities/error");
-var BaseController = /** @class */ (function (_super) {
-    __extends(BaseController, _super);
-    function BaseController() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
+const tsoa_1 = require("tsoa");
+const error_1 = require("../utilities/error");
+class BaseController extends tsoa_1.Controller {
     /**
-   * Send error response
-   * @param occuredError error string
-   * @param status status code
-   * @param message error message
-   * @param code default error code of the system
-   */
-    BaseController.prototype._errorResponse = function (occuredError, message, status) {
-        var error;
+     * Send error response
+     * @param occuredError error string
+     * @param status status code
+     * @param message error message
+     * @param code default error code of the system
+     */
+    _errorResponse(occuredError, message, status) {
+        let error;
         if ((occuredError instanceof error_1.MyError)) {
             error = occuredError;
         }
@@ -67,13 +50,13 @@ var BaseController = /** @class */ (function (_super) {
         }
         // this.setStatus(error.responeStatus);
         this.setStatus(error.responeStatus);
-        var response = {
+        const response = {
             code: error.code,
             message: error.message
         };
         // logger.error("[" + error.code + "] - " + error.message);
         return response;
-    };
+    }
     /**
      * Send error response
      * @param req request object
@@ -81,17 +64,17 @@ var BaseController = /** @class */ (function (_super) {
      * @param message response message
      * @param status status code if necessary
      */
-    BaseController.prototype._successResponse = function (req, data, message, status, total) {
+    _successResponse(req, data, message, status, total) {
         // to be removed
         this.setStatus(status || 200);
         // this.setHeader("X-Request-Id", req.requestId);
-        var response = {
+        const response = {
             message: message || "Success!",
             total: total,
             data: data
         };
         return response;
-    };
-    return BaseController;
-}(tsoa_1.Controller));
+    }
+}
 exports.BaseController = BaseController;
+//# sourceMappingURL=base.controller.js.map

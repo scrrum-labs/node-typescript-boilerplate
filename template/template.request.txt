@@ -1,0 +1,4 @@
+export interface ITemplateRequest {
+    title: string;
+    isDeleted: boolean;
+}

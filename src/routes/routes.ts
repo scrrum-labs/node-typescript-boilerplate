@@ -24,17 +24,22 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "roles": {
+    "rolesEnum": {
         "dataType": "refEnum",
-        "enums": ["superadmin", "staff"],
+        "enums": ["admin", "manager", "executive"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "teamsEnum": {
+        "dataType": "refEnum",
+        "enums": ["enquiry", "sales", "design", "manufacturing", "dispatch", "installation"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UserReequest": {
         "dataType": "refObject",
         "properties": {
             "name": { "dataType": "string", "required": true },
-            "email": { "dataType": "string", "required": true },
-            "type": { "ref": "roles", "required": true },
+            "role": { "ref": "rolesEnum", "required": true },
+            "team": { "ref": "teamsEnum", "required": true },
             "username": { "dataType": "string", "required": true },
             "secret": { "dataType": "string", "required": true },
         },

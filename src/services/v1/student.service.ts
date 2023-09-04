@@ -1,8 +1,8 @@
 import { IStudent } from '../../models/interfaces/IStudent';
-import {studentSchema, Student} from '../../models/schemas/student.schema'
+import { studentSchema, Student } from '../../models/schemas/student.schema';
 
 export class StudentService {
-    public async getStudentList () {
+    public async getStudentList() {
         const studentList = await Student.find().exec();
         return studentList;
     }
@@ -24,7 +24,7 @@ export class StudentService {
     }
 
     public async updateStudent(studentId: string, studentRequestBody: IStudent) {
-        const studentUpdatedDetail = Student.findByIdAndUpdate(studentId, studentRequestBody, {new: true});
+        const studentUpdatedDetail = Student.findByIdAndUpdate(studentId, studentRequestBody, { new: true });
         return studentUpdatedDetail;
     }
 }

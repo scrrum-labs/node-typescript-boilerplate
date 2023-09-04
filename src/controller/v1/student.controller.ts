@@ -16,7 +16,7 @@ export class StudentController extends BaseController {
 
     @Get('{studentId}/detail')
     public async studentDetail(@Path() studentId: string) {
-        const studentDetail = await new StudentService().getStudentDetail(studentId)
+        const studentDetail = await new StudentService().getStudentDetail(studentId);
         return this._successResponse('', studentDetail, 'Student Detail', 200, 1);
     }
 

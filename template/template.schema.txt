@@ -1,0 +1,24 @@
+import mongoose from "mongoose";
+import { BaseDocument } from "../base.model";
+import { TemplateDocumentJSON } from "../interfaces/ITemplate";
+
+export const TemplateSchema = new mongoose.Schema({
+    organizationId: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    }
+}, {
+    timestamps: true
+});
+
+export const TemplateModel = mongoose.model<TemplateDocument>("template", TemplateSchema);
+export interface TemplateDocument extends BaseDocument, TemplateDocumentJSON { }
